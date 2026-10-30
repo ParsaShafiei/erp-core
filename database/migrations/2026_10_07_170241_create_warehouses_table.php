@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,9 +13,13 @@ return new class extends Migration {
     {
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
+            $table->string('code')->unique();
             $table->string('name');
-            $table->string('address');
-            $table->foreignId('manager_id')->constrained('users');
+            $table->text('address')->nullable();
+            $table->foreignId('manager_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
